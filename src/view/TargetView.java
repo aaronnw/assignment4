@@ -36,6 +36,7 @@ public class TargetView implements Observer {
     Model m;
     Pane root;
     private final String startMessage = "Set the number of attempts";
+    private final String helpMessage = "Click the circles as fast as possible" + "\n" + "to demonstrate Fitt's law";
 
     public TargetView(Model m, Controller c, Stage s){
         rootStage = s;
@@ -58,10 +59,17 @@ public class TargetView implements Observer {
         if(arg.toString().equals("TestFinished")){
             openAnalysis();
         }
+        if(arg.toString().equals("TestRestarted")){
+            m = new Model();
+            c = new Controller(m);
+            m.addObserver(this);
+            clearScene();
+            openSetNumScene();
+        }
     }
     public void openSetNumScene(){
         VBox root = new VBox(10);
-        Scene scene = new Scene(root,300,200);
+        Scene scene = new Scene(root,350,200);
         Insets padding = new Insets(10,10,10,10);
         root.setPadding(padding);
 
@@ -91,6 +99,10 @@ public class TargetView implements Observer {
         Button confirmNumber = new Button("START");
         confirmNumber.setOnAction(c.getConfirmButtonHandler(clickNum));
         root.getChildren().add(confirmNumber);
+
+        Text help = new Text(helpMessage);
+        root.getChildren().add(help);
+
 
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
@@ -148,8 +160,8 @@ public class TargetView implements Observer {
         root.getChildren().add(target);
     }
     public void openAnalysis(){
-        StackPane stack = new StackPane();
-        stack.setPadding(new Insets(10,10,10,10));
+        VBox root = new VBox();
+        root.setPadding(new Insets(10,10,10,10));
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Difficulty");
@@ -164,9 +176,13 @@ public class TargetView implements Observer {
             }
         }
         chart.getData().add(series);
-        stack.setAlignment(Pos.CENTER);
-        stack.getChildren().add(chart);
-        Scene scene = new Scene(stack,1000,1000);
+        root.setAlignment(Pos.CENTER);
+        root.getChildren().add(chart);
+        Scene scene = new Scene(root,1000,1000);
+
+        Button restart = new Button("Restart");
+        restart.setOnAction(c.getRestartHandler());
+        root.getChildren().add(restart);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
         rootStage.centerOnScreen();

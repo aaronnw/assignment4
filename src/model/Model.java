@@ -39,7 +39,6 @@ public class Model extends Observable {
     }
     public void createStartTarget(){
         currentTarget = new Target(50, 500, 500);
-        targetList.add(currentTarget);
         setChanged();
         notifyObservers("StartTarget");
     }
@@ -67,6 +66,10 @@ public class Model extends Observable {
         setChanged();
         notifyObservers("TestFinished");
     }
+    public void setTestRestarted(){
+        setChanged();
+        notifyObservers("TestRestarted");
+    }
     public int getCurrentTargetNum(){
         return currentTargetNum;
     }
@@ -77,4 +80,5 @@ public class Model extends Observable {
     public ArrayList<TestResult> getResultList() {
         return resultList;
     }
+
 }

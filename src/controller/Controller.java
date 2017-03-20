@@ -8,6 +8,8 @@ import model.Model;
 import model.Target;
 import model.TestResult;
 
+import java.sql.Driver;
+
 public class Controller {
 
     private final Model m;
@@ -81,5 +83,14 @@ public class Controller {
     }
     public void endTest(){
         m.setTestFinished();
+    }
+
+    public EventHandler getRestartHandler() {
+        return new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                m.setTestRestarted();
+            }
+        };
     }
 }
