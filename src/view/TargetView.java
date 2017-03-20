@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controller;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
@@ -34,8 +35,8 @@ public class TargetView implements Observer {
     Controller c;
     Model m;
     Pane root;
-
     private final String startMessage = "Set the number of attempts";
+
     public TargetView(Model m, Controller c, Stage s){
         rootStage = s;
         this.m = m;
@@ -59,8 +60,14 @@ public class TargetView implements Observer {
         }
     }
     public void openSetNumScene(){
-        VBox root = new VBox();
-        Scene scene = new Scene(root,300,300);
+        VBox root = new VBox(10);
+        Scene scene = new Scene(root,300,200);
+        Insets padding = new Insets(10,10,10,10);
+        root.setPadding(padding);
+
+        Text numberPrompt = new Text(startMessage);
+        root.getChildren().add(numberPrompt);
+
         Spinner<Integer> clickNum = new Spinner<Integer>();
         clickNum.setValueFactory(new SpinnerValueFactory<Integer>() {
             @Override
@@ -81,15 +88,13 @@ public class TargetView implements Observer {
         clickNum.getValueFactory().setValue(1);
         root.getChildren().add(clickNum);
 
-        Text numberPrompt = new Text(startMessage);
-        root.getChildren().add(numberPrompt);
-
         Button confirmNumber = new Button("START");
         confirmNumber.setOnAction(c.getConfirmButtonHandler(clickNum));
         root.getChildren().add(confirmNumber);
 
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
+        rootStage.centerOnScreen();
         rootStage.show();
     }
     public void openTestScene(){
@@ -116,6 +121,7 @@ public class TargetView implements Observer {
         stackPane.getChildren().add(stack);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
+        rootStage.centerOnScreen();
         rootStage.show();
     }
     public void clearScene(){
@@ -123,6 +129,7 @@ public class TargetView implements Observer {
         Scene scene = new Scene(root,1000,1000);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
+        rootStage.centerOnScreen();
         rootStage.show();
     }
     public void generateTarget(Target targetInfo){
@@ -142,16 +149,18 @@ public class TargetView implements Observer {
     }
     public void openAnalysis(){
         StackPane stack = new StackPane();
+        stack.setPadding(new Insets(10,10,10,10));
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Difficulty");
-        yAxis.setLabel("Time");
+        yAxis.setLabel("Time (seconds)");
         final ScatterChart<Number,Number> chart = new ScatterChart<Number,Number>(xAxis,yAxis);
+        chart.setLegendVisible(false);
         XYChart.Series series = new XYChart.Series();
         ArrayList<TestResult> resultList = m.getResultList();
         for(TestResult result: resultList){
             if(result.getSuccess()) {
-                series.getData().add(new XYChart.Data(result.getDifficulty(), result.getTime()));
+                series.getData().add(new XYChart.Data(result.getDifficulty(), result.getTime()/1000));
             }
         }
         chart.getData().add(series);
@@ -160,6 +169,7 @@ public class TargetView implements Observer {
         Scene scene = new Scene(stack,1000,1000);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
+        rootStage.centerOnScreen();
         rootStage.show();
 
     }

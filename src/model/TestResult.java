@@ -10,12 +10,12 @@ public class TestResult {
     double startLocationY;
     double locationX;
     double locationY;
-    long time;
+    double time;
     double size;
     double difficulty;
     boolean success;
 
-    public TestResult(double startLocationX, double startLocationY, double locationX, double locationY, long time, double size, boolean success){
+    public TestResult(double startLocationX, double startLocationY, double locationX, double locationY, double time, double size, boolean success){
         this.startLocationX = startLocationX;
         this.startLocationY = startLocationY;
         this.locationX = locationX;
@@ -49,7 +49,7 @@ public class TestResult {
         return locationY;
     }
 
-    public long getTime() {
+    public double getTime() {
         return time;
     }
 
