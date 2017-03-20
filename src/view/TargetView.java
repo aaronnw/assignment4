@@ -180,9 +180,17 @@ public class TargetView implements Observer {
         root.getChildren().add(chart);
         Scene scene = new Scene(root,1000,1000);
 
+        Text hitPercentage = new Text();
+        double p = m.calcHitPercentage();
+        String percentage = (String.valueOf(Math.round(p*100)) + "% of targets were hit");
+        hitPercentage.setText(percentage);
+        root.getChildren().add(hitPercentage);
+
         Button restart = new Button("Restart");
         restart.setOnAction(c.getRestartHandler());
         root.getChildren().add(restart);
+
+
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
         rootStage.centerOnScreen();

@@ -49,6 +49,15 @@ public class Model extends Observable {
         setChanged();
         notifyObservers("NewTarget");
     }
+    public double calcHitPercentage(){
+        int hit = 0;
+        for(TestResult result:resultList){
+            if(result.getSuccess()){
+                hit ++;
+            }
+        }
+        return (double) hit/resultList.size();
+    }
     public Target getCurrentTarget(){
         return currentTarget;
     }
