@@ -27,16 +27,13 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Created by Aaron on 3/17/2017.
- */
 public class TargetView implements Observer {
-    Stage rootStage;
-    Controller c;
-    Model m;
-    Pane root;
-    private final String startMessage = "Set the number of attempts";
-    private final String helpMessage = "Click the circles as fast as possible" + "\n" + "to demonstrate Fitt's law";
+    private final Stage rootStage;
+    private Controller c;
+    private Model m;
+    private Pane root;
+    private static final String START_MESSAGE = "Set the number of attempts";
+    private static final String HELP_MESSAGE = "Click the circles as fast as possible" + "\n" + "to demonstrate Fitt's law";
 
     public TargetView(Model m, Controller c, Stage s){
         rootStage = s;
@@ -67,16 +64,16 @@ public class TargetView implements Observer {
             openSetNumScene();
         }
     }
-    public void openSetNumScene(){
+    private void openSetNumScene(){
         VBox root = new VBox(10);
         Scene scene = new Scene(root,350,200);
         Insets padding = new Insets(10,10,10,10);
         root.setPadding(padding);
 
-        Text numberPrompt = new Text(startMessage);
+        Text numberPrompt = new Text(START_MESSAGE);
         root.getChildren().add(numberPrompt);
 
-        Spinner<Integer> clickNum = new Spinner<Integer>();
+        Spinner<Integer> clickNum = new Spinner<>();
         clickNum.setValueFactory(new SpinnerValueFactory<Integer>() {
             @Override
             public void decrement(int steps) {
@@ -93,14 +90,14 @@ public class TargetView implements Observer {
                 clickNum.getValueFactory().setValue(++currentVal);
             }
         });
-        clickNum.getValueFactory().setValue(1);
+        clickNum.getValueFactory().setValue(10);
         root.getChildren().add(clickNum);
 
         Button confirmNumber = new Button("START");
         confirmNumber.setOnAction(c.getConfirmButtonHandler(clickNum));
         root.getChildren().add(confirmNumber);
 
-        Text help = new Text(helpMessage);
+        Text help = new Text(HELP_MESSAGE);
         root.getChildren().add(help);
 
 
@@ -109,7 +106,7 @@ public class TargetView implements Observer {
         rootStage.centerOnScreen();
         rootStage.show();
     }
-    public void openTestScene(){
+    private void openTestScene(){
         Target targetInfo = m.getCurrentTarget();
         int radius = targetInfo.getRadius();
         int x = targetInfo.getX();
@@ -136,7 +133,7 @@ public class TargetView implements Observer {
         rootStage.centerOnScreen();
         rootStage.show();
     }
-    public void clearScene(){
+    private void clearScene(){
         root = new Pane();
         Scene scene = new Scene(root,1000,1000);
         rootStage.setScene( scene );
@@ -144,7 +141,7 @@ public class TargetView implements Observer {
         rootStage.centerOnScreen();
         rootStage.show();
     }
-    public void generateTarget(Target targetInfo){
+    private void generateTarget(Target targetInfo){
         root.getChildren().clear();
         //Add a randomized circle to the pane
         int radius = targetInfo.getRadius();
@@ -159,20 +156,23 @@ public class TargetView implements Observer {
         root.setOnMouseClicked(c.getTargetHandler());
         root.getChildren().add(target);
     }
-    public void openAnalysis(){
+    private void openAnalysis(){
         VBox root = new VBox();
         root.setPadding(new Insets(10,10,10,10));
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Difficulty");
         yAxis.setLabel("Time (seconds)");
-        final ScatterChart<Number,Number> chart = new ScatterChart<Number,Number>(xAxis,yAxis);
+        final ScatterChart<Number,Number> chart = new ScatterChart<>(xAxis,yAxis);
         chart.setLegendVisible(false);
-        XYChart.Series series = new XYChart.Series();
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
         ArrayList<TestResult> resultList = m.getResultList();
         for(TestResult result: resultList){
             if(result.getSuccess()) {
-                series.getData().add(new XYChart.Data(result.getDifficulty(), result.getTime()/1000));
+                double xVal = result.getDifficulty();
+                double yVal = result.getTime()/1000;
+                XYChart.Data<Number, Number> data = new XYChart.Data<>(xVal, yVal );
+                series.getData().add(data);
             }
         }
         chart.getData().add(series);

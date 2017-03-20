@@ -5,7 +5,7 @@ import model.Model;
 import controller.Controller;
 
 /**
- * Created by Aaron on 3/17/2017.
+ * HCI assignment 4
  */
 public class Driver extends Application{
     public static void main(String[] args) {

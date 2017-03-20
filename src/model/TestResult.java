@@ -2,18 +2,15 @@ package model;
 
 import javafx.geometry.Point2D;
 
-/**
- * Created by Aaron on 3/20/2017.
- */
 public class TestResult {
-    double startLocationX;
-    double startLocationY;
-    double locationX;
-    double locationY;
-    double time;
-    double size;
-    double difficulty;
-    boolean success;
+    private final double startLocationX;
+    private final double startLocationY;
+    private final double locationX;
+    private final double locationY;
+    private final double time;
+    private final double size;
+    private double difficulty;
+    private final boolean success;
 
     public TestResult(double startLocationX, double startLocationY, double locationX, double locationY, double time, double size, boolean success){
         this.startLocationX = startLocationX;
@@ -27,34 +24,15 @@ public class TestResult {
         System.out.println(startLocationX + " " + startLocationY + " "  + locationX+ " " + locationY+ " " + time+ " " + size);
     }
     //Calculate difficulty index by the log of the distance divided by the width plus 1
-    public void calcDifficulty(){
+    private void calcDifficulty(){
         Point2D startPoint = new Point2D(startLocationX, startLocationY);
         Point2D endPoint = new Point2D(locationX, locationY);
         double distance = endPoint.distance(startPoint);
         difficulty = Math.log(distance/size + 1);
     }
-    public double getStartLocationX() {
-        return startLocationX;
-    }
-
-    public double getStartLocationY() {
-        return startLocationY;
-    }
-
-    public double getLocationX() {
-        return locationX;
-    }
-
-    public double getLocationY() {
-        return locationY;
-    }
 
     public double getTime() {
         return time;
-    }
-
-    public double getSize() {
-        return size;
     }
 
     public double getDifficulty() {

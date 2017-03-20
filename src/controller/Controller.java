@@ -1,14 +1,12 @@
 package controller;
 
-import javafx.event.Event;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Spinner;
 import javafx.scene.input.MouseEvent;
 import model.Model;
 import model.Target;
 import model.TestResult;
-
-import java.sql.Driver;
 
 public class Controller {
 
@@ -19,43 +17,27 @@ public class Controller {
         this.m = m;
     }
 
-    public EventHandler getConfirmButtonHandler(Spinner<Integer> s) {
-        return new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                m.setTestNum(s.getValue());
-                m.createStartTarget();
-            }
+    public EventHandler<ActionEvent> getConfirmButtonHandler(Spinner<Integer> s) {
+        return event -> {
+            m.setTestNum(s.getValue());
+            m.createStartTarget();
         };
     }
     public EventHandler<? super MouseEvent> getStartTargetHandler() {
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                m.setTestStarted();
-                m.createTarget();
-            }
+        return (EventHandler<MouseEvent>) event -> {
+            m.setTestStarted();
+            m.createTarget();
         };
     }
     public EventHandler<? super MouseEvent> getTargetClickedHandler() {
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                success = true;
-            }
-        };
+        return (EventHandler<MouseEvent>) event -> success = true;
     }
 
 
     public EventHandler<? super MouseEvent> getTargetHandler() {
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                recordAttempt();
-            }
-        };
+        return (EventHandler<MouseEvent>) event -> recordAttempt();
     }
-    public void recordAttempt(){
+    private void recordAttempt(){
         Target target = m.getCurrentTarget();
         //Get the location
         double locationX = target.getX();
@@ -81,16 +63,11 @@ public class Controller {
             m.createTarget();
         }
     }
-    public void endTest(){
+    private void endTest(){
         m.setTestFinished();
     }
 
-    public EventHandler getRestartHandler() {
-        return new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                m.setTestRestarted();
-            }
-        };
+    public EventHandler<ActionEvent> getRestartHandler() {
+        return event -> m.setTestRestarted();
     }
 }

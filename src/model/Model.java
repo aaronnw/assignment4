@@ -1,28 +1,21 @@
 package model;
 
-import javafx.geometry.Point2D;
-
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Random;
 
-/**
- * Created by Aaron on 3/17/2017.
- */
 public class Model extends Observable {
     private int testNum;
     private int currentTargetNum;
     private long timeTargetGenerated;
     private Target currentTarget;
-    private ArrayList<Target> targetList;
-    private ArrayList<TestResult> resultList;
-    private ArrayList<Double> difficultyList;
+    private final ArrayList<Target> targetList;
+    private final ArrayList<TestResult> resultList;
 
     public Model(){
         testNum = 0;
         currentTargetNum = 0;
-        targetList = new ArrayList<Target>();
-        resultList = new ArrayList<TestResult>();
+        targetList = new ArrayList<>();
+        resultList = new ArrayList<>();
     }
     public void setTestNum(Integer num) {
         testNum = num;
