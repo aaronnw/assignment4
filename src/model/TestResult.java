@@ -13,14 +13,16 @@ public class TestResult {
     long time;
     double size;
     double difficulty;
+    boolean success;
 
-    public TestResult(double startLocationX, double startLocationY, double locationX, double locationY, long time, double size){
+    public TestResult(double startLocationX, double startLocationY, double locationX, double locationY, long time, double size, boolean success){
         this.startLocationX = startLocationX;
         this.startLocationY = startLocationY;
         this.locationX = locationX;
         this.locationY = locationY;
         this.time = time;
         this.size = size;
+        this.success = success;
         calcDifficulty();
         System.out.println(startLocationX + " " + startLocationY + " "  + locationX+ " " + locationY+ " " + time+ " " + size);
     }
@@ -57,5 +59,8 @@ public class TestResult {
 
     public double getDifficulty() {
         return difficulty;
+    }
+    public boolean getSuccess(){
+        return success;
     }
 }

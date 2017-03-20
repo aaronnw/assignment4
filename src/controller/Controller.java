@@ -54,10 +54,6 @@ public class Controller {
         };
     }
     public void recordAttempt(){
-        if(!success){
-            m.createTarget();
-            return;
-        }
         Target target = m.getCurrentTarget();
         //Get the location
         double locationX = target.getX();
@@ -70,9 +66,11 @@ public class Controller {
         //Get the size of the target
         double size = target.getRadius();
         //Create a test result object
-        TestResult newResult = new TestResult(startLocationX, startLocationY, locationX, locationY, time, size);
+        TestResult newResult = new TestResult(startLocationX, startLocationY, locationX, locationY, time, size, success);
         m.recordTargetData(newResult);
-        m.incrementTargetCount();
+        if(success) {
+            m.incrementTargetCount();
+        }
         if(m.getCurrentTargetNum() >= m.getTestNum()){
             System.out.println("finished");
             endTest();

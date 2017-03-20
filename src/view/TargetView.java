@@ -150,7 +150,9 @@ public class TargetView implements Observer {
         XYChart.Series series = new XYChart.Series();
         ArrayList<TestResult> resultList = m.getResultList();
         for(TestResult result: resultList){
-            series.getData().add(new XYChart.Data(result.getDifficulty(), result.getTime()));
+            if(result.getSuccess()) {
+                series.getData().add(new XYChart.Data(result.getDifficulty(), result.getTime()));
+            }
         }
         chart.getData().add(series);
         stack.setAlignment(Pos.CENTER);
