@@ -6,23 +6,44 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Model;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 /**
  * Created by Aaron on 3/17/2017.
  */
 public class TargetView implements Observer {
+    Stage rootStage;
+    Controller c;
+    Model m;
 
     private final String startMessage = "Set the number of attempts";
-    public TargetView(Model m, Controller c, Stage primaryStage){
+    public TargetView(Model m, Controller c, Stage s){
+        rootStage = s;
+        this.m = m;
+        this.c = c;
+        openSetNumScene();
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(arg.toString().equals("NumSet")){
+            openTestScene();
+            generateTarget();
+
+        }
+    }
+    public void openSetNumScene(){
         VBox root = new VBox();
-        Scene scene = new Scene(root,500,500);
+        Scene scene = new Scene(root,300,300);
         Spinner<Integer> clickNum = new Spinner<Integer>();
         clickNum.setValueFactory(new SpinnerValueFactory<Integer>() {
             @Override
@@ -38,17 +59,11 @@ public class TargetView implements Observer {
             public void increment(int steps) {
                 int currentVal = clickNum.getValueFactory().getValue();
                 clickNum.getValueFactory().setValue(++currentVal);
-
             }
         });
         clickNum.getValueFactory().setValue(1);
         root.getChildren().add(clickNum);
-/*
-        Circle target = new Circle();
-        target.setRadius(50);
-        target.setFill(Color.RED);
-        root.getChildren().add(target);
-*/
+
         Text numberPrompt = new Text(startMessage);
         root.getChildren().add(numberPrompt);
 
@@ -56,16 +71,27 @@ public class TargetView implements Observer {
         confirmNumber.setOnAction(c.getConfirmButtonHandler(clickNum));
         root.getChildren().add(confirmNumber);
 
-        primaryStage.setScene( scene );
-        primaryStage.setTitle( "Fitz Law Demo" );
-        primaryStage.show();
+        rootStage.setScene( scene );
+        rootStage.setTitle( "Fitz Law Demo" );
+        rootStage.show();
     }
+    public void openTestScene(){
+        VBox root = new VBox();
+        Scene scene = new Scene(root,1000,1000);
 
-    @Override
-    public void update(Observable o, Object arg) {
-        if(arg.toString().equals("NumSet")){
-            openTest();
-        }
+        rootStage.setScene( scene );
+        rootStage.setTitle( "Fitz Law Demo" );
+        rootStage.show();
     }
-    public void openTest(){}
+    public void generateTarget(){
+        /*
+        Random randomSize = new Random();
+        Random randomX = new Random();
+        Random randomY = new Random();
+        Circle target = new Circle();
+        target.setRadius(50);
+        target.setFill(Color.RED);
+        root.getChildren().add(target);
+        */
+    }
 }
