@@ -122,6 +122,7 @@ public class TargetView implements Observer {
         target.setLayoutY(y);
         target.setOnMouseClicked(c.getStartTargetHandler());
         Text text = new Text("START");
+        text.setOnMouseClicked(c.getStartTargetHandler());
         text.setBoundsType(TextBoundsType.VISUAL);
         StackPane stack = new StackPane();
         stack.getChildren().addAll(target, text);
@@ -192,6 +193,7 @@ public class TargetView implements Observer {
         Rectangle missChar = new Rectangle(10, 10);
         missChar.setFill(Color.RED);
         chart.getData().addAll(hitSeries, missSeries);
+        chart.getStylesheets().add("/view/graphStylesheet.css");
         root.setAlignment(Pos.CENTER);
         root.getChildren().add(chart);
         Scene scene = new Scene(root,1000,1000);

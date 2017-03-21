@@ -1,0 +1,18 @@
+.chart-content {
+    -fx-padding: 30px;
+    -fx-color0: #ff4500;
+    -fx-color1: #00ffff;
+}
+.chart-legend {
+   -fx-background-color:  transparent;
+   -fx-padding: 20px;
+}
+
+.default-color0.chart-symbol {
+    -fx-background-color: #ff4500;
+}
+.default-color1.chart-symbol {
+    -fx-background-color: #00ffff;
+    -fx-background-radius: 0;
+}
+.default-color1.
