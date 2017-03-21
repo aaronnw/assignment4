@@ -15,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
@@ -164,18 +165,33 @@ public class TargetView implements Observer {
         xAxis.setLabel("Difficulty");
         yAxis.setLabel("Time (seconds)");
         final ScatterChart<Number,Number> chart = new ScatterChart<>(xAxis,yAxis);
-        chart.setLegendVisible(false);
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        XYChart.Series<Number, Number> hitSeries = new XYChart.Series<>();
+        XYChart.Series<Number, Number> missSeries = new XYChart.Series<>();
+
+
         ArrayList<TestResult> resultList = m.getResultList();
         for(TestResult result: resultList){
             if(result.getSuccess()) {
                 double xVal = result.getDifficulty();
                 double yVal = result.getTime()/1000;
-                XYChart.Data<Number, Number> data = new XYChart.Data<>(xVal, yVal );
-                series.getData().add(data);
+                XYChart.Data<Number, Number> hitData = new XYChart.Data<>(xVal, yVal );
+                hitSeries.getData().add(hitData);
+            }else{
+                double xVal = result.getDifficulty();
+                double yVal = result.getTime()/1000;
+                XYChart.Data<Number, Number> missData = new XYChart.Data<>(xVal, yVal );
+                Rectangle missChar = new Rectangle(10, 10);
+                missChar.setFill(Color.RED);
+                missData.setNode(missChar);
+                missSeries.getData().add(missData);
             }
         }
-        chart.getData().add(series);
+
+        hitSeries.setName("Hit targets");
+        missSeries.setName("Missed targets");
+        Rectangle missChar = new Rectangle(10, 10);
+        missChar.setFill(Color.RED);
+        chart.getData().addAll(hitSeries, missSeries);
         root.setAlignment(Pos.CENTER);
         root.getChildren().add(chart);
         Scene scene = new Scene(root,1000,1000);
