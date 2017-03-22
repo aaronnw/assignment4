@@ -21,7 +21,6 @@ public class Model extends Observable {
     }
     public void setTestNum(Integer num) {
         testNum = num;
-        System.out.println(testNum);
     }
 
     public void recordTargetData(TestResult result) {
@@ -30,7 +29,6 @@ public class Model extends Observable {
 
     public void incrementTargetCount() {
         currentTargetNum++;
-        System.out.println(currentTargetNum);
     }
     public void createStartTarget(){
         currentTarget = new Target(50, 500, 500);

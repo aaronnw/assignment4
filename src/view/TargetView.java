@@ -15,7 +15,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
@@ -56,12 +55,8 @@ public class TargetView implements Observer {
             break;
             case "TestFinished": openAnalysis();
             break;
-            case "TestRestarted":
-                m = new Model();
-                c = new Controller(m);
-                m.addObserver(this);
-                openSetNumScene();
-                break;
+            case "TestRestarted": restartTest();
+            break;
         }
     }
     //Opens the first scene to get the number of targets to hit
@@ -180,6 +175,7 @@ public class TargetView implements Observer {
         XYChart.Series<Number, Number> missSeries = new XYChart.Series<>();
 
         ArrayList<TestResult> resultList = m.getResultList();
+        boolean showMisses = false;
         for(TestResult result: resultList){
             if(result.getSuccess()) {
                 double xVal = result.getDifficulty();
@@ -191,12 +187,16 @@ public class TargetView implements Observer {
                 double yVal = result.getTime()/1000;
                 XYChart.Data<Number, Number> missData = new XYChart.Data<>(xVal, yVal );
                 missSeries.getData().add(missData);
+                showMisses = true;
             }
         }
 
         hitSeries.setName("Hit targets");
         missSeries.setName("Missed targets");
-        chart.getData().addAll(hitSeries, missSeries);
+        chart.getData().add(hitSeries);
+        if(showMisses) {
+            chart.getData().add(missSeries);
+        }
         chart.setPadding(new Insets(10,10,10,10));
         chart.getStylesheets().add("/view/graphStylesheet.css");
         root.setAlignment(Pos.CENTER);
@@ -223,5 +223,11 @@ public class TargetView implements Observer {
         rootStage.centerOnScreen();
         rootStage.show();
 
+    }
+    private void restartTest(){
+        m = new Model();
+        c = new Controller(m);
+        m.addObserver(this);
+        openSetNumScene();
     }
 }
