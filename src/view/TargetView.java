@@ -33,8 +33,8 @@ public class TargetView implements Observer {
     private Controller c;
     private Model m;
     private Pane root;
-    private static final String START_MESSAGE = "Set the number of attempts";
-    private static final String HELP_MESSAGE = "Click the circles as fast as possible" + "\n" + "to demonstrate Fitt's law";
+    private static final String START_MESSAGE = "Set the number of targets";
+    private static final String HELP_MESSAGE = "Click the circles as fast as possible" + "\n" + "\n" + "When the number is reached a results graph will appear";
 
     public TargetView(Model m, Controller c, Stage s){
         rootStage = s;
@@ -61,7 +61,6 @@ public class TargetView implements Observer {
             m = new Model();
             c = new Controller(m);
             m.addObserver(this);
-            clearScene();
             openSetNumScene();
         }
     }
@@ -101,7 +100,8 @@ public class TargetView implements Observer {
         Text help = new Text(HELP_MESSAGE);
         root.getChildren().add(help);
 
-
+        rootStage.setMinWidth(350);
+        rootStage.setMinHeight(200);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
         rootStage.centerOnScreen();
@@ -161,6 +161,7 @@ public class TargetView implements Observer {
     private void openAnalysis(){
         VBox root = new VBox();
         root.setPadding(new Insets(10,10,10,10));
+
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Difficulty");
@@ -168,7 +169,6 @@ public class TargetView implements Observer {
         final ScatterChart<Number,Number> chart = new ScatterChart<>(xAxis,yAxis);
         XYChart.Series<Number, Number> hitSeries = new XYChart.Series<>();
         XYChart.Series<Number, Number> missSeries = new XYChart.Series<>();
-
 
         ArrayList<TestResult> resultList = m.getResultList();
         for(TestResult result: resultList){
@@ -181,34 +181,34 @@ public class TargetView implements Observer {
                 double xVal = result.getDifficulty();
                 double yVal = result.getTime()/1000;
                 XYChart.Data<Number, Number> missData = new XYChart.Data<>(xVal, yVal );
-                Rectangle missChar = new Rectangle(10, 10);
-                missChar.setFill(Color.RED);
-                missData.setNode(missChar);
                 missSeries.getData().add(missData);
             }
         }
 
         hitSeries.setName("Hit targets");
         missSeries.setName("Missed targets");
-        Rectangle missChar = new Rectangle(10, 10);
-        missChar.setFill(Color.RED);
         chart.getData().addAll(hitSeries, missSeries);
+        chart.setPadding(new Insets(10,10,10,10));
         chart.getStylesheets().add("/view/graphStylesheet.css");
         root.setAlignment(Pos.CENTER);
         root.getChildren().add(chart);
-        Scene scene = new Scene(root,1000,1000);
 
         Text hitPercentage = new Text();
         double p = m.calcHitPercentage();
         String percentage = (String.valueOf(Math.round(p*100)) + "% of targets were hit");
         hitPercentage.setText(percentage);
+
         root.getChildren().add(hitPercentage);
 
         Button restart = new Button("Restart");
         restart.setOnAction(c.getRestartHandler());
         root.getChildren().add(restart);
 
+        root.setSpacing(10);
+        Scene scene = new Scene(root,1000,1000);
 
+        rootStage.setMinHeight(450);
+        rootStage.setMinWidth(450);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
         rootStage.centerOnScreen();

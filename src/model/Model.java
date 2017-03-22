@@ -10,6 +10,8 @@ public class Model extends Observable {
     private Target currentTarget;
     private final ArrayList<Target> targetList;
     private final ArrayList<TestResult> resultList;
+    private double previousX;
+    private double previousY;
 
     public Model(){
         testNum = 0;
@@ -83,4 +85,19 @@ public class Model extends Observable {
         return resultList;
     }
 
+    public double getPreviousX() {
+        return previousX;
+    }
+
+    public void setPreviousX(double previousX) {
+        this.previousX = previousX;
+    }
+
+    public double getPreviousY() {
+        return previousY;
+    }
+
+    public void setPreviousY(double previousY) {
+        this.previousY = previousY;
+    }
 }

@@ -25,6 +25,8 @@ public class Controller {
     }
     public EventHandler<? super MouseEvent> getStartTargetHandler() {
         return (EventHandler<MouseEvent>) event -> {
+            m.setPreviousX(event.getX());
+            m.setPreviousY(event.getY());
             m.setTestStarted();
             m.createTarget();
         };
@@ -35,33 +37,36 @@ public class Controller {
 
 
     public EventHandler<? super MouseEvent> getTargetHandler() {
-        return (EventHandler<MouseEvent>) event -> recordAttempt();
+        return (EventHandler<MouseEvent>) event -> {
+            recordAttempt(event.getX(), event.getY());
+        };
     }
-    private void recordAttempt(){
+    private void recordAttempt(double x, double y){
         Target target = m.getCurrentTarget();
-        //Get the location
-        double locationX = target.getX();
-        double locationY = target.getY();
-        //Get the previous location
-        double startLocationX = m.getLastTarget().getX();
-        double startLocationY = m.getLastTarget().getY();
+        //Get the click location
+        double locationX = x;
+        double locationY = y;
+        //Get the last click location
+        double previousX = m.getPreviousX();
+        double previousY = m.getPreviousY();
         //Get the time to reach the target
         long time = System.currentTimeMillis() - m.getTimeTargetGenerated();
         //Get the size of the target
         double size = target.getRadius();
         //Create a test result object
-        TestResult newResult = new TestResult(startLocationX, startLocationY, locationX, locationY, time, size, success);
+        TestResult newResult = new TestResult(previousX, previousY, locationX, locationY, time, size, success);
         m.recordTargetData(newResult);
         if(success) {
             m.incrementTargetCount();
         }
         if(m.getCurrentTargetNum() >= m.getTestNum()){
-            System.out.println("finished");
             endTest();
         }else{
             success = false;
             m.createTarget();
         }
+        m.setPreviousX(x);
+        m.setPreviousY(y);
     }
     private void endTest(){
         m.setTestFinished();
