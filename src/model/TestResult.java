@@ -21,7 +21,6 @@ public class TestResult {
         this.size = size;
         this.success = success;
         calcDifficulty();
-        System.out.println(startLocationX + " " + startLocationY + " "  + locationX+ " " + locationY+ " " + time+ " " + size);
     }
     //Calculate difficulty index by the log of the distance divided by the width plus 1
     private void calcDifficulty(){

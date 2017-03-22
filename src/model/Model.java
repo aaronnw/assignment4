@@ -56,9 +56,6 @@ public class Model extends Observable {
     public Target getCurrentTarget(){
         return currentTarget;
     }
-    public Target getLastTarget(){
-        return targetList.get(targetList.size() -1);
-    }
     public long getTimeTargetGenerated(){
         return timeTargetGenerated;
     }

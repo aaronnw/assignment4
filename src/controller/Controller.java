@@ -31,30 +31,23 @@ public class Controller {
             m.createTarget();
         };
     }
+
     public EventHandler<? super MouseEvent> getTargetClickedHandler() {
         return (EventHandler<MouseEvent>) event -> success = true;
     }
 
 
     public EventHandler<? super MouseEvent> getTargetHandler() {
-        return (EventHandler<MouseEvent>) event -> {
-            recordAttempt(event.getX(), event.getY());
-        };
+        return (EventHandler<MouseEvent>) event -> recordAttempt(event.getX(), event.getY());
     }
     private void recordAttempt(double x, double y){
         Target target = m.getCurrentTarget();
-        //Get the click location
-        double locationX = x;
-        double locationY = y;
-        //Get the last click location
-        double previousX = m.getPreviousX();
-        double previousY = m.getPreviousY();
         //Get the time to reach the target
         long time = System.currentTimeMillis() - m.getTimeTargetGenerated();
         //Get the size of the target
         double size = target.getRadius();
         //Create a test result object
-        TestResult newResult = new TestResult(previousX, previousY, locationX, locationY, time, size, success);
+        TestResult newResult = new TestResult(m.getPreviousX(), m.getPreviousY(), target.getX(), target.getY(), time, size, success);
         m.recordTargetData(newResult);
         if(success) {
             m.incrementTargetCount();
@@ -65,13 +58,13 @@ public class Controller {
             success = false;
             m.createTarget();
         }
+        //Set the new point to be the old one for the next target
         m.setPreviousX(x);
         m.setPreviousY(y);
     }
     private void endTest(){
         m.setTestFinished();
     }
-
     public EventHandler<ActionEvent> getRestartHandler() {
         return event -> m.setTestRestarted();
     }

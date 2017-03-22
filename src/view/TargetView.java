@@ -35,6 +35,7 @@ public class TargetView implements Observer {
     private Pane root;
     private static final String START_MESSAGE = "Set the number of targets";
     private static final String HELP_MESSAGE = "Click the circles as fast as possible" + "\n" + "\n" + "When the number is reached a results graph will appear";
+    private static final double TEST_SIZE = 1100;
 
     public TargetView(Model m, Controller c, Stage s){
         rootStage = s;
@@ -43,27 +44,27 @@ public class TargetView implements Observer {
         openSetNumScene();
     }
 
+    //Updates based on model changes
     @Override
     public void update(Observable o, Object arg) {
-        if(arg.toString().equals("StartTarget")){
-            openTestScene();
-        }
-        if(arg.toString().equals("TestStarted")){
-            clearScene();
-        }
-        if(arg.toString().equals("NewTarget")){
-            generateTarget(m.getCurrentTarget());
-        }
-        if(arg.toString().equals("TestFinished")){
-            openAnalysis();
-        }
-        if(arg.toString().equals("TestRestarted")){
-            m = new Model();
-            c = new Controller(m);
-            m.addObserver(this);
-            openSetNumScene();
+        switch(arg.toString()){
+            case "StartTarget" : openTestScene();
+            break;
+            case "TestStarted" : clearScene();
+            break;
+            case "NewTarget": generateTarget(m.getCurrentTarget());
+            break;
+            case "TestFinished": openAnalysis();
+            break;
+            case "TestRestarted":
+                m = new Model();
+                c = new Controller(m);
+                m.addObserver(this);
+                openSetNumScene();
+                break;
         }
     }
+    //Opens the first scene to get the number of targets to hit
     private void openSetNumScene(){
         VBox root = new VBox(10);
         Scene scene = new Scene(root,350,200);
@@ -102,6 +103,8 @@ public class TargetView implements Observer {
 
         rootStage.setMinWidth(350);
         rootStage.setMinHeight(200);
+        rootStage.setWidth(350);
+        rootStage.setHeight(200);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
         rootStage.centerOnScreen();
@@ -128,8 +131,11 @@ public class TargetView implements Observer {
         stack.getChildren().addAll(target, text);
         StackPane stackPane = new StackPane();
         stackPane.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(stackPane,1000,1000);
+        Scene scene = new Scene(stackPane,TEST_SIZE,TEST_SIZE);
         stackPane.getChildren().add(stack);
+        rootStage.setWidth(TEST_SIZE);
+        rootStage.setHeight(TEST_SIZE);
+        rootStage.setResizable(false);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
         rootStage.centerOnScreen();
@@ -137,7 +143,10 @@ public class TargetView implements Observer {
     }
     private void clearScene(){
         root = new Pane();
-        Scene scene = new Scene(root,1000,1000);
+        Scene scene = new Scene(root,TEST_SIZE,TEST_SIZE);
+        rootStage.setWidth(TEST_SIZE);
+        rootStage.setHeight(TEST_SIZE);
+        rootStage.setResizable(false);
         rootStage.setScene( scene );
         rootStage.setTitle( "Fitt's Law Demo" );
         rootStage.centerOnScreen();
@@ -205,7 +214,7 @@ public class TargetView implements Observer {
         root.getChildren().add(restart);
 
         root.setSpacing(10);
-        Scene scene = new Scene(root,1000,1000);
+        Scene scene = new Scene(root,TEST_SIZE,TEST_SIZE);
 
         rootStage.setMinHeight(450);
         rootStage.setMinWidth(450);
